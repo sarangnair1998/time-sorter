@@ -1,0 +1,213 @@
+[gd_scene load_steps=20 format=3]
+
+[ext_resource type="Script" path="res://scripts/title.gd" id="1_title"]
+[ext_resource type="Script" path="res://scripts/drips.gd" id="2_drips"]
+[ext_resource type="Script" path="res://scripts/wipe.gd" id="3_wipe"]
+[ext_resource type="Script" path="res://scripts/puff.gd" id="4_puff"]
+[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="5_outline"]
+[ext_resource type="Texture2D" path="res://assets/art/background.png" id="6_bg"]
+[ext_resource type="Texture2D" path="res://assets/art/upper_arm.png" id="7_upper"]
+[ext_resource type="Texture2D" path="res://assets/art/forearm.png" id="8_forearm"]
+[ext_resource type="Texture2D" path="res://assets/art/orb_start.png" id="9_orb_start"]
+[ext_resource type="Texture2D" path="res://assets/art/orb_options.png" id="10_orb_options"]
+[ext_resource type="Texture2D" path="res://assets/art/ink.png" id="11_ink"]
+[ext_resource type="Texture2D" path="res://assets/art/stamp.png" id="12_stamp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
+shader = ExtResource("5_outline")
+shader_parameter/line_color = Color(0.09, 0.075, 0.063, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.07, 0.04, 0.09, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84, 0.27, 0.18, 1)
+content_margin_left = 16.0
+content_margin_top = 14.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+
+[node name="Title" type="Node2D"]
+script = ExtResource("1_title")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("6_bg")
+centered = false
+
+[node name="TentacleLeft" type="AnimatedSprite2D" parent="."]
+centered = false
+
+[node name="TentacleRight" type="AnimatedSprite2D" parent="."]
+position = Vector2(480, 0)
+centered = false
+
+[node name="ThrownOrbs" type="Node2D" parent="."]
+
+[node name="ArmLeft" type="CanvasGroup" parent="."]
+material = SubResource("ShaderMaterial_outline")
+position = Vector2(264, 250)
+fit_margin = 6.0
+
+[node name="Upper" type="Sprite2D" parent="ArmLeft"]
+texture = ExtResource("7_upper")
+centered = false
+offset = Vector2(-124, -8)
+
+[node name="Forearm" type="Sprite2D" parent="ArmLeft/Upper"]
+position = Vector2(-30, 23)
+texture = ExtResource("8_forearm")
+centered = false
+offset = Vector2(-94, -31)
+
+[node name="ArmRight" type="CanvasGroup" parent="."]
+material = SubResource("ShaderMaterial_outline")
+position = Vector2(376, 250)
+scale = Vector2(-1, 1)
+fit_margin = 6.0
+
+[node name="Upper" type="Sprite2D" parent="ArmRight"]
+texture = ExtResource("7_upper")
+centered = false
+offset = Vector2(-124, -8)
+
+[node name="Forearm" type="Sprite2D" parent="ArmRight/Upper"]
+position = Vector2(-30, 23)
+texture = ExtResource("8_forearm")
+centered = false
+offset = Vector2(-94, -31)
+
+[node name="Head" type="AnimatedSprite2D" parent="."]
+position = Vector2(219, 83)
+centered = false
+
+[node name="OrbLeft" type="Sprite2D" parent="."]
+texture = ExtResource("9_orb_start")
+
+[node name="OrbRight" type="Sprite2D" parent="."]
+texture = ExtResource("10_orb_options")
+
+[node name="Puff" type="Node2D" parent="."]
+script = ExtResource("4_puff")
+
+[node name="Ink" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(220, 34)
+texture = ExtResource("11_ink")
+centered = false
+
+[node name="Drips" type="Node2D" parent="."]
+script = ExtResource("2_drips")
+
+[node name="Dim" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="Stamp" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(211, -297)
+scale = Vector2(4, 4)
+texture = ExtResource("12_stamp")
+centered = false
+
+[node name="Wipe" type="Node2D" parent="."]
+script = ExtResource("3_wipe")
+
+[node name="Fade" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.043, 0.031, 0.063, 0)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Options" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -55.0
+offset_right = 150.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="UI/Options"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Heading" type="Label" parent="UI/Options/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.27, 0.18, 1)
+theme_override_font_sizes/font_size = 16
+text = "OPTIONS"
+
+[node name="Row" type="HBoxContainer" parent="UI/Options/Box"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="UI/Options/Box/Row"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "VOLUME"
+
+[node name="Volume" type="HSlider" parent="UI/Options/Box/Row"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 80.0
+
+[node name="Value" type="Label" parent="UI/Options/Box/Row"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "80"
+
+[node name="Back" type="Button" parent="UI/Options/Box"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "BACK"
+
+[node name="StartCard" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -55.0
+offset_right = 150.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="UI/StartCard"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Heading" type="Label" parent="UI/StartCard/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.27, 0.18, 1)
+theme_override_font_sizes/font_size = 16
+text = "THE GAME STARTS HERE"
+
+[node name="Note" type="Label" parent="UI/StartCard/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "The next screen is not designed yet."
+
+[node name="Again" type="Button" parent="UI/StartCard/Box"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "BACK TO TITLE"
